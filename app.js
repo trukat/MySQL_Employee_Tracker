@@ -1,6 +1,7 @@
 const mysql = require("mysql");
 const inquirer = require("inquirer");
-const consTable = require("console.table");
+require("console.table");
+const db = require("./db");
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -47,7 +48,7 @@ const start = () => {
           break;
 
         case "Add Department":
-          addDepartment();
+          addDept();
           break;
 
         case "Update Employee Role":
@@ -67,37 +68,20 @@ const start = () => {
 
 start();
 
-const viewEmployees = () => {
-  let sqlquery =
-    "SELECT DISTINCT department_id AS id, CONCAT(first_name, ' ', last_name) AS Employee, deptname as DeptName, title, salary ";
-  sqlquery += "FROM department ";
-  sqlquery += "INNER JOIN role ";
-  sqlquery += "ON department.id = department_id ";
-  sqlquery += "INNER JOIN employee ";
-  sqlquery += "ON role.id = role_id; ";
-  console.log("List of all current employees. \n");
-  connection.query(sqlquery, (err, res) => {
-    if (err) throw err;
-    console.table(res);
-    return res;
-  });
+async function viewEmployees() {
+  const employees = await db.findAllEmployees();
+  console.log("\n");
+  console.table(employees);
   start();
 };
 
-const viewRoles = () => {
-  let sqlquery = "SELECT title, salary ";
-  sqlquery += "FROM department ";
-  sqlquery += "JOIN role ";
-  sqlquery += "ON department.id = department_id ";
-  console.log("List of current roles. \n");
-  connection.query(sqlquery, (err, res) => {
-    if (err) throw err;
-    console.table(res);
+async function viewRoles() {
+  const roles = await db.findAllRoles();
+    console.table(roles);
     start();
-  });
-};
+  };
 
-const addEmployee = () => {
+async function addEmployee() {
   inquirer
     .prompt([
       {
@@ -206,41 +190,67 @@ const addDepartment = () => {
 };
 
 async function updateRole() {
-    const employees = await viewEmployees();
-    console.log (employees);
-    const employeeChoices = employees.map(({
-        id, first_name, last_name
-    }) => ({
-        name: `${first_name} ${last_name}`,
-        value: id
-    }));
-    const {employeeID} = await inquirer.prompt([
-        {
-            type: "list",
-            name: "employeeID",
-            message: "Which employees' role do you want to update?",
-            choices: employeeChoices
-        }
-    ])
-    console.table(employees);
+  const employees = await db.findAllEmployees();
+  console.log(employees);
+  const employeeChoices = employees.map(({ id, first_name, last_name }) => ({
+    name: `${first_name} ${last_name}`,
+    value: id,
+  }));
+  const { employeeId } = await inquirer.prompt([
+    {
+      type: "list",
+      name: "employeeId",
+      message: "Which employees' role do you want to update?",
+      choices: employeeChoices,
+    },
+  ]);
+
+  const roles = await db.findAllRoles();
+
+  const roleChoices = roles.map(({ id, title }) => ({
+    name: title,
+    value: id,
+  }));
+
+  const { roleId } = await inquirer.prompt([
+    {
+      type: "list",
+      name: "roleId",
+      message: "Which role do you want to assign the selected employee?",
+      choices: roleChoices,
+    },
+  ]);
+
+  await db.updateEmployeeRole(employeeId, roleId);
+
+  console.log("Updated employee's role");
+
+  start();
 }
 
-const viewDepts = () => {
-    let sqlquery = "SELECT department_id as id, deptname as DeptName, CONCAT(first_name, ' ', last_name) AS Employee ";
-    sqlquery += "FROM department ";
-    sqlquery += "JOIN role ";
-    sqlquery += "ON department.id = department_id ";
-    sqlquery += "JOIN employee ";
-    sqlquery += "ON role.id = role_id ";
-    sqlquery += "ORDER BY DeptName ";
-    sqlquery += "DESC ";
-    console.log("List of current employees by department. \n");
-    connection.query(sqlquery, (err, res) => {
-    if (err) throw err;
-    console.table(res);
-    start();
-  });
-};
+async function viewDepts() {
+  const depts = await db.findAllDepts();
+  console.table(depts);
+  start();
+}
+
+// const viewDepts = () => {
+//   let sqlquery =
+//     "SELECT DISTINCT department_id AS id, CONCAT(first_name, ' ', last_name) AS Employee, deptname as DeptName, title, salary ";
+//   sqlquery += "FROM department ";
+//   sqlquery += "JOIN role ";
+//   sqlquery += "ON department.id = department_id ";
+//   sqlquery += "JOIN employee ";
+//   sqlquery += "ON role.id = role_id ";
+//   sqlquery += "ORDER BY DeptName ";
+//   sqlquery += "DESC ";
+//   console.log("List of current employees by department. \n");
+//   connection.query(sqlquery, (err, res) => {
+//     if (err) throw err;
+//     console.table(res);
+//     start();
+//   });
+// };
 
 // connection.connect((err) => {
 //     if (err) throw err;
