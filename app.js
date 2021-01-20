@@ -234,24 +234,6 @@ async function viewDepts() {
   start();
 }
 
-// const viewDepts = () => {
-//   let sqlquery =
-//     "SELECT DISTINCT department_id AS id, CONCAT(first_name, ' ', last_name) AS Employee, deptname as DeptName, title, salary ";
-//   sqlquery += "FROM department ";
-//   sqlquery += "JOIN role ";
-//   sqlquery += "ON department.id = department_id ";
-//   sqlquery += "JOIN employee ";
-//   sqlquery += "ON role.id = role_id ";
-//   sqlquery += "ORDER BY DeptName ";
-//   sqlquery += "DESC ";
-//   console.log("List of current employees by department. \n");
-//   connection.query(sqlquery, (err, res) => {
-//     if (err) throw err;
-//     console.table(res);
-//     start();
-//   });
-// };
-
 // connection.connect((err) => {
 //     if (err) throw err;
 //     console.log('connected as id ' + connection.threadId);
