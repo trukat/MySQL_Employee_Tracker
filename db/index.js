@@ -9,13 +9,25 @@ class DB {
 
     findAllEmployees() {
         return this.connection.query(
-            "SELECT DISTINCT department_id AS id, CONCAT(first_name, ' ', last_name) AS Employee, deptname as DeptName, title, salary FROM department JOIN role ON department.id = department_id JOIN employee ON role.id = role_id;"
+            "SELECT employee.id, CONCAT(employee.first_name, ' ', employee.last_name) AS Employee, role.title, role.salary, department.deptname AS department FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id;"
         );
     }
 
     findAllRoles() {
         return this.connection.query(
-            "SELECT department_id, deptname, title, salary FROM department JOIN role ON department.id = department_id;"
+            "SELECT department.id, title, deptname FROM department JOIN role ON department.id = department_id;"
+        );
+    }
+
+    createEmployee(employee) {
+        return this.connection.query(
+            "INSERT INTO employee SET ?", employee
+        );
+    }
+
+    createRole(role) {
+        return this.connection.query(
+            "INSERT INTO role SET ?", role
         );
     }
 

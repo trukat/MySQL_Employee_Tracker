@@ -73,97 +73,111 @@ async function viewEmployees() {
   console.log("\n");
   console.table(employees);
   start();
-};
+}
 
 async function viewRoles() {
   const roles = await db.findAllRoles();
-    console.table(roles);
-    start();
-  };
+  console.log("\n");
+  console.table(roles);
+  start();
+}
 
 async function addEmployee() {
-  inquirer
-    .prompt([
-      {
-        type: "input",
-        name: "first_name",
-        message: "What is the employee's first name?",
-      },
-      {
-        type: "input",
-        name: "last_name",
-        message: "What is the employee's last name?",
-      },
-      {
-        type: "list",
-        name: "role_id",
-        message: "What is the employee's role ID?",
-        choices: [1, 2, 3, 4, 5],
-      },
-      {
-        type: "list",
-        name: "manager_id",
-        message: "What is the new employee's Manager ID?",
-        choices: [001, 003, 004, 005],
-      },
-    ])
-    .then((res) => {
-      console.log(res);
-      connection.query(
-        "INSERT INTO employee SET ?",
-        {
-          first_name: res.first_name,
-          last_name: res.last_name,
-          role_id: res.role_id,
-          manager_id: res.manager_id,
-        },
-        (err) => {
-          if (err) throw err;
-          console.log(
-            `Success: ${res.first_name} ${res.last_name} added to the database`
-          );
-          start();
-        }
-      );
-    });
-};
+  const roles = await db.findAllRoles();
 
-const addRole = () => {
-  inquirer
-    .prompt([
-      {
-        type: "input",
-        name: "title",
-        message: "What is the title for this role?",
-      },
-      {
-        type: "input",
-        name: "salary",
-        message: "What is this role's salary?",
-      },
-      {
-        type: "list",
-        name: "department_id",
-        message: "What department is this role being added to?",
-        choices: [1, 2, 3, 4],
-      },
-    ])
-    .then((res) => {
-      console.log("Success: New role added. \n");
-      connection.query(
-        "INSERT INTO role SET ?",
-        {
-          title: res.title,
-          salary: res.salary,
-          department_id: res.department_id,
-        },
-        (err, res) => {
-          if (err) throw err;
-          start();
-        }
-      );
-    });
-};
+  const roleChoices = roles.map(({ id, title }) => ({
+    name: title,
+    value: id,
+  }));
+
+  const managers = await db.findAllEmployees();
+  const managerChoices = managers.map(({ id, Employee }) => ({
+    name: Employee,
+    value: id,
+  }));
+
+  const employee = await inquirer.prompt([
+    {
+      type: "input",
+      name: "first_name",
+      message: "What is the employee's first name?",
+    },
+    {
+      type: "input",
+      name: "last_name",
+      message: "What is the employee's last name?",
+    },
+  ]);
+  const { roleID } = await inquirer.prompt([
+    {
+      type: "list",
+      name: "roleID",
+      message: "What is the employee's role?",
+      choices: roleChoices,
+    },
+  ]);
+  employee.role_id = roleID;
+  const { managerID } = await inquirer.prompt([
+    {
+      type: "list",
+      name: "managerID",
+      message: "What is the new employee's manager?",
+      choices: managerChoices,
+    },
+  ]);
+  employee.manager_id = managerID;
+  await db.createEmployee(employee);
+  console.log(
+    `Success: ${employee.first_name} ${employee.last_name} added to the database`
+  );
+  start();
+}
+
+// async function addRole() {
+//   const roles = await db.findAllRoles();
+
+//   const roleChoices = roles.map(({ id, title }) => ({
+//     name: title,
+//     value: id,
+//   }));
+
+//   const role = await inquirer
+//     .prompt([
+//       {
+//         type: "input",
+//         name: "title",
+//         message: "What is the title for this role?",
+//       }
+//     ]);
+//     const { salary } = await inquirer.prompt([{
+//       {
+//         type: "input",
+//         name: "salary",
+//         message: "What is this role's salary?",
+//       },
+//       {
+//         type: "list",
+//         name: "department_id",
+//         message: "What department is this role being added to?",
+//         choices: [1, 2, 3, 4],
+//       },
+//     ])
+//     .then((res) => {
+//       console.log("Success: New role added. \n");
+//       connection.query(
+//         "INSERT INTO role SET ?",
+//         {
+//           title: res.title,
+//           salary: res.salary,
+//           department_id: res.department_id,
+//         },
+//         (err, res) => {
+//           if (err) throw err;
+//           start();
+//         }
+//       );
+//     });
+// }
 
 const addDepartment = () => {
   inquirer
