@@ -26,6 +26,7 @@ const start = () => {
           "Add a Role",
           "Add Department",
           "Update Employee Role",
+          "Remove Employee",
           "View All Employees by Department",
           "Exit",
         ],
@@ -60,6 +61,10 @@ const start = () => {
         case "Update Employee Role":
           updateRole();
           break;
+
+          case "Remove Employee":
+            removeEmployee();
+            break;
 
         case "View All Employees by Department":
           viewEmpDepts();
@@ -232,28 +237,28 @@ async function updateRole() {
   start();
 }
 
-// async function removeEmployee() {
-//   const employees = await db.findAllEmployees();
-//   const employeeChoices = employees.map(({ id, Employee }) => ({
-//     name: Employee,
-//     value: id,
-//   }));
+async function removeEmployee() {
+  const employees = await db.findAllEmployees();
+  const employeeChoices = employees.map(({ id, Employee }) => ({
+    name: Employee,
+    value: id,
+  }));
 
-//   const { employee } = await inquirer.prompt([
-//     {
-//       type: "list",
-//       name: "employeeId",
-//       message: "Which employee would you like to remove?",
-//       choices: employeeChoices,
-//     },
-//   ]);
-//   employee.id = employee;
-//   await db.deleteEmployee(employee);
-//   console.log(
-//     "Success: Employee removed from the database"
-//   );
-//   start();
-// }
+  const { employee } = await inquirer.prompt([
+    {
+      type: "list",
+      name: "employeeId",
+      message: "Which employee would you like to remove?",
+      choices: employeeChoices,
+    },
+  ]);
+  id = employee;
+  await db.deleteEmployee(employee);
+  console.log(
+    "Success: Employee removed from the database"
+  );
+  start();
+}
 
 async function viewEmpDepts() {
   const depts = await db.findEmpDepts();

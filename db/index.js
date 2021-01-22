@@ -50,11 +50,11 @@ class DB {
         )
     }
 
-    // deleteEmployee(employee) {
-    //     return this.connection.query(
-    //         "DELETE FROM employee WHERE employee.id = ?;", [employee]
-    //     );
-    // }
+    deleteEmployee(employee) {
+        return this.connection.query(
+            "DELETE FROM employee WHERE id = ?;", [employee]
+        );
+    }
 
     findEmpDepts() {
         return this.connection.query(

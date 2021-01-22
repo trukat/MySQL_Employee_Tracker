@@ -28,5 +28,5 @@ role_id INT NOT NULL,
 manager_id INT NULL,
 PRIMARY KEY (id),
 FOREIGN KEY(role_id) REFERENCES role(id),
-FOREIGN KEY(manager_id) REFERENCES employee(id)
+FOREIGN KEY(manager_id) REFERENCES employee(id) ON DELETE CASCADE
 );
