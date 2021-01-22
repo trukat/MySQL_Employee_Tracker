@@ -19,6 +19,12 @@ class DB {
         );
     }
 
+    findAllDepts() {
+        return this.connection.query(
+            "SELECT * FROM department"
+        );
+    }
+
     createEmployee(employee) {
         return this.connection.query(
             "INSERT INTO employee SET ?", employee
@@ -31,14 +37,26 @@ class DB {
         );
     }
 
+    createDept(department) {
+        return this.connection.query(
+            "INSERT INTO department SET ?", department
+        );
+    }
+
     updateEmployeeRole(employeeId, roleId) {
         return this.connection.query(
             "UPDATE employee SET role_id = ? WHERE id = ?",
-            [roleId, employeeId]
+            [employeeId, roleId]
         )
     }
 
-    findAllDepts() {
+    // deleteEmployee(employee) {
+    //     return this.connection.query(
+    //         "DELETE FROM employee WHERE employee.id = ?;", [employee]
+    //     );
+    // }
+
+    findEmpDepts() {
         return this.connection.query(
             "SELECT department_id as id, CONCAT(first_name, ' ', last_name) AS Employee, deptname as DeptName FROM department JOIN role ON department.id = department_id JOIN employee ON role.id = role_id ORDER BY DeptName DESC;"
         );

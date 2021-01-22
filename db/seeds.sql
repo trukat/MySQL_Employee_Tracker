@@ -9,11 +9,11 @@ INSERT INTO role (title, salary, department_id) VALUES ("Sr Counsel", 110000, 2)
 INSERT INTO role (title, salary, department_id) VALUES ("Accountant", 125000, 3); 
 INSERT INTO role (title, salary, department_id) VALUES ("Salesperson", 80000, 1);
 
-INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Fred", "Jones", 4, 2);
-INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Dapne", "Blake", 5, 1);
-INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Velma", "Dinkley", 1, 5);
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Fred", "Jones", 4, 1);
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Dapne", "Blake", 5, 2);
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Velma", "Dinkley", 1, 3);
 INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Shaggy", "Rogers", 3, 4);
-INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Scooby", "Doo", 2, 3);
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Scooby", "Doo", 2, 5);
 
 SELECT DISTINCT department_id AS id, CONCAT(first_name, ' ', last_name) AS Employee, deptname as DeptName, title, salary
 FROM department
