@@ -1,7 +1,7 @@
 const mysql = require("mysql");
 const inquirer = require("inquirer");
-require("console.table");
 const db = require("./db");
+require("console.table")
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -181,7 +181,6 @@ async function addRole() {
   ]);
   role.department_id = deptID;
   await db.createRole(role);
-
   console.log("Success: New role added. \n");
   start();
 }
@@ -230,7 +229,7 @@ async function updateRole() {
     },
   ]);
 
-  await db.updateEmployeeRole(employeeId, roleId);
+  await db.updateEmployeeRole(roleId, employeeId);
 
   console.log("Updated employee's role");
 
@@ -255,7 +254,7 @@ async function removeEmployee() {
   id = employee;
   await db.deleteEmployee(employee);
   console.log(
-    "Success: Employee removed from the database"
+    "Success: Employee removed from the database. \n"
   );
   start();
 }

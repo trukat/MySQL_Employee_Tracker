@@ -1,6 +1,5 @@
 const connection = require('./connection');
-const inquirer = require("inquirer");
-const cTable = require("console.table");
+require("console.table")
 
 class DB {
     constructor(connection) {
@@ -43,10 +42,10 @@ class DB {
         );
     }
 
-    updateEmployeeRole(employeeId, roleId) {
+    updateEmployeeRole(roleId, employeeId) {
         return this.connection.query(
             "UPDATE employee SET role_id = ? WHERE id = ?",
-            [employeeId, roleId]
+            [roleId, employeeId]
         )
     }
 
@@ -58,7 +57,7 @@ class DB {
 
     findEmpDepts() {
         return this.connection.query(
-            "SELECT department_id as id, CONCAT(first_name, ' ', last_name) AS Employee, deptname as DeptName FROM department JOIN role ON department.id = department_id JOIN employee ON role.id = role_id ORDER BY DeptName DESC;"
+            "SELECT CONCAT(first_name, ' ', last_name) AS Employee, deptname as DeptName FROM department JOIN role ON department.id = department_id JOIN employee ON role.id = role_id ORDER BY DeptName DESC;"
         );
     }
 }
