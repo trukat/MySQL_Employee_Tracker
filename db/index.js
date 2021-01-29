@@ -14,7 +14,7 @@ class DB {
 
     findAllRoles() {
         return this.connection.query(
-            "SELECT department.id, title, deptname FROM department JOIN role ON department.id = department_id;"
+            "SELECT role.id, title, deptname FROM department JOIN role ON department.id = department_id;"
         );
     }
 

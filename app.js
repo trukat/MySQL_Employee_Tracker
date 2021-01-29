@@ -198,6 +198,8 @@ async function addDept() {
   start();
 }
 
+
+// choice uses index to update employee role
 async function updateRole() {
   const employees = await db.findAllEmployees();
   const employeeChoices = employees.map(({ id, Employee }) => ({
@@ -236,6 +238,8 @@ async function updateRole() {
   start();
 }
 
+
+// console log shows employee removed, but not from database
 async function removeEmployee() {
   const employees = await db.findAllEmployees();
   const employeeChoices = employees.map(({ id, Employee }) => ({
