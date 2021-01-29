@@ -247,7 +247,7 @@ async function removeEmployee() {
     value: id,
   }));
 
-  const { employee } = await inquirer.prompt([
+  const employee = await inquirer.prompt([
     {
       type: "list",
       name: "employeeId",
@@ -256,7 +256,7 @@ async function removeEmployee() {
     },
   ]);
   id = employee;
-  await db.deleteEmployee(employee);
+  await db.deleteEmployee(employee.employeeId);
   console.log(
     "Success: Employee removed from the database. \n"
   );
